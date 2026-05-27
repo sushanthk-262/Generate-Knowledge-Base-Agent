@@ -119,4 +119,4 @@ gh repo create <owner>/kt-skill --public --source=. --remote=origin --push
 
 ## License
 
-Add a license file appropriate to your distribution before publishing.
+[MIT](LICENSE) © 2026 Sushanth.
