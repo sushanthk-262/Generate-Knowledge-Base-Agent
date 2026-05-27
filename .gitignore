@@ -15,3 +15,6 @@ Thumbs.db
 Guides/
 *.extracted.txt
 *.alt.md
+
+# Domain overlays kept locally but not published
+.github/instructions/intel-security-domain.instructions.md
