@@ -1,6 +1,6 @@
-# kt-skill — Workspace → Knowledge Transfer Guide generator
+# generate-knowledge-base-agent — Generate Knowledge Base agent + KT workflow
 
-A drop-in **Copilot agent skill** (prompt + instructions + tooling) that ingests
+A drop-in **Copilot custom agent + prompt workflow** (agent + instructions + tooling) that ingests
 an arbitrary workspace — text, code, slides, PDFs, images, audio, video — and
 produces a beginner-friendly Knowledge Transfer (KT) guide series under
 `Guides/`.
@@ -12,10 +12,13 @@ recordings, decks, and docs, and needs a single readable path from
 ## What's in this folder
 
 ```
-kt-skill/
+generate-knowledge-base-agent/
 ├── .github/
 │   ├── prompts/
-│   │   └── generate-kt-guides.prompt.md       ← invokable workflow
+│   │   ├── generate-knowledge-base.prompt.md  ← primary slash-command workflow
+│   │   └── generate-kt-guides.prompt.md       ← legacy compatibility alias
+│   ├── agents/
+│   │   └── generate-knowledge-base.agent.md   ← custom agent (recommended)
 │   └── instructions/
 │       ├── kt-guide-style.instructions.md     ← auto-applied to Guides/**/*.md
 │       └── intel-security-domain.instructions.md  ← example domain overlay
@@ -40,8 +43,14 @@ pip install -r tools\requirements.txt
 
 Then, in VS Code Copilot Chat (agent mode):
 
-```
-/generate-kt-guides
+- Recommended: select **Generate Knowledge Base** custom agent.
+- Prompt command: run `/generate-knowledge-base`.
+- Legacy alias: `/generate-kt-guides`.
+
+Always install dependencies before running the scripts used by the workflow:
+
+```powershell
+pip install -r tools\requirements.txt
 ```
 
 The prompt will ask for:
@@ -51,17 +60,18 @@ The prompt will ask for:
 
 ## What the skill does (9 passes, all idempotent)
 
-1. **Inventory** — `scan_workspace.py` → `Guides/_inventory.json`.
-2. **Transcribe** — Whisper turns every video/audio into a sibling `.txt`.
-3. **Extract** — PDFs / PPTX / DOCX / notebooks → `.extracted.txt` sidecars
+1. **Preflight** — install Python dependencies from `tools/requirements.txt`.
+2. **Inventory** — `scan_workspace.py` → `Guides/_inventory.json`.
+3. **Transcribe** — Whisper turns every video/audio into a sibling `.txt`.
+4. **Extract** — PDFs / PPTX / DOCX / notebooks → `.extracted.txt` sidecars
    (with per-slide / per-page / per-cell markers).
-4. **Caption** — multimodal pass writes `<image>.alt.md` for diagrams/screenshots.
-5. **Cluster** — group artifacts into topics (folder names + TF-IDF on titles).
-6. **Outline** — write `Guides/README.md` with the reading order.
-7. **Author** — one `Guides/NN-<slug>.md` per topic, following the style file.
-8. **Provenance + glossary + quizzes** — `Guides/_sources.md`,
+5. **Caption** — multimodal pass writes `<image>.alt.md` for diagrams/screenshots.
+6. **Cluster** — group artifacts into topics (folder names + TF-IDF on titles).
+7. **Outline** — write `Guides/README.md` with the reading order.
+8. **Author** — one `Guides/NN-<slug>.md` per topic, following the style file.
+9. **Provenance + glossary + quizzes** — `Guides/_sources.md`,
    `Guides/99-glossary.md`, and `Guides/quizzes/NN-<slug>.md` (5 flashcards each).
-9. **Final pass** — fix dangling links, print a one-screen summary.
+10. **Final pass** — fix dangling links, print a one-screen summary.
 
 Re-runs only rewrite guides whose source artifacts changed (sha256 in the
 inventory).
@@ -110,11 +120,11 @@ python tools\extract_docs.py --root .
 ## Splitting into its own repo
 
 ```powershell
-cd kt-skill
+cd generate-knowledge-base-agent
 git init
 git add .
-git commit -m "Initial commit: kt-skill"
-gh repo create <owner>/kt-skill --public --source=. --remote=origin --push
+git commit -m "Initial commit: generate-knowledge-base-agent"
+gh repo create <owner>/generate-knowledge-base-agent --public --source=. --remote=origin --push
 ```
 
 ## License

@@ -1,4 +1,4 @@
-# Dependencies for the /generate-kt-guides workflow.
+# Dependencies for the /generate-knowledge-base workflow.
 # Install with:  pip install -r tools/requirements.txt
 
 # Video/audio transcription

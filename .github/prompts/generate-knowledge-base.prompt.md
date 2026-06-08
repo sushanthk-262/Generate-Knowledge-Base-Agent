@@ -4,9 +4,9 @@ description: Walk the current workspace, ingest text/code/docs/slides/images/aud
 tools: ['edit', 'search', 'runCommands', 'runTasks', 'usages', 'think', 'fetch', 'githubRepo', 'todos', 'extensions', 'editFiles', 'runNotebooks']
 ---
 
-# /generate-kt-guides — Legacy alias of /generate-knowledge-base
+# /generate-knowledge-base — Workspace → Knowledge-Transfer Guide series
 
-Compatibility command. Keep this file so existing users can continue invoking the old command.
+Primary command. This is the preferred prompt entrypoint.
 
 You are generating a **Knowledge Transfer (KT) pack** for someone who has just been given access to this repository and has **zero prior context** on either the repo or its subject matter. The deliverable lives under `Guides/` and must be readable top-to-bottom by a newcomer.
 

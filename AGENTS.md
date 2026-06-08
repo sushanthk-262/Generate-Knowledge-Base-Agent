@@ -1,14 +1,18 @@
 # AGENTS.md — orientation for AI coding agents
 
-This repository is **kt-skill**: a portable Knowledge Transfer (KT) generator
+This repository is **generate-knowledge-base-agent**: a portable Knowledge Transfer (KT) generator
 designed to be copied into any target workspace. It does not contain KT
 content of its own — only the prompt, instructions, and tooling that produce
 KT content elsewhere.
 
 ## Repo layout
 
-- `.github/prompts/generate-kt-guides.prompt.md` — the invokable workflow.
-  Triggered with `/generate-kt-guides` in Copilot Chat agent mode.
+- `.github/agents/generate-knowledge-base.agent.md` — custom agent entrypoint
+  (recommended) for end-to-end KT generation.
+- `.github/prompts/generate-knowledge-base.prompt.md` — primary invokable
+  prompt workflow, available via `/generate-knowledge-base`.
+- `.github/prompts/generate-kt-guides.prompt.md` — legacy compatibility alias
+  for `/generate-knowledge-base`.
 - `.github/instructions/kt-guide-style.instructions.md` — auto-applied to
   `Guides/**/*.md` in any target repo that installs this skill.
 - `.github/instructions/intel-security-domain.instructions.md` — **example**
@@ -20,22 +24,26 @@ KT content elsewhere.
 ## How a target repo invokes the skill
 
 Once `.github/`, `tools/`, and `AGENTS.md` have been copied into the target
-repo and `pip install -r tools/requirements.txt` has been run, an agent (or
-human) runs:
+repo, first run `pip install -r tools/requirements.txt` before any script
+execution, then invoke one of:
+
+- Custom agent: `Generate Knowledge Base` (recommended)
+- Prompt command: `/generate-knowledge-base`
+- Legacy prompt alias: `/generate-kt-guides`
 
 ```
-/generate-kt-guides
+pip install -r tools/requirements.txt
 ```
 
-The prompt orchestrates a 9-step pipeline (inventory → transcribe → extract →
+The workflow orchestrates a 10-step pipeline (preflight → inventory → transcribe → extract →
 caption → cluster → outline → author → provenance/glossary/quizzes → final).
-See the prompt file for the full step list.
+See the custom agent and prompt files for the full step list.
 
 ## Rules every agent must follow when editing this repo
 
 1. **Treat this repo as a library, not as a KT target.** Do not create a
-   `Guides/` folder here. Do not invoke `/generate-kt-guides` on this repo —
-   there's nothing meaningful to summarize.
+  `Guides/` folder here. Do not invoke `/generate-knowledge-base` or
+  `/generate-kt-guides` on this repo — there's nothing meaningful to summarize.
 2. When you change [`tools/`](tools/), keep the scripts **idempotent** and
    **dependency-light**. Optional dependencies (e.g. `whisper`, `pypdf`) must
    import lazily and fail with an actionable error message — never crash the
@@ -45,7 +53,8 @@ See the prompt file for the full step list.
    - Preserve the file-skeleton contract (`In one sentence`, `Threat → Mitigation`,
      `Key concepts`, `How it works`, `Configuration knobs`, `Pitfalls`,
      `Where this connects`, `Sources`).
-4. When you change [`.github/prompts/generate-kt-guides.prompt.md`](.github/prompts/generate-kt-guides.prompt.md):
+4. When you change [`.github/prompts/generate-knowledge-base.prompt.md`](.github/prompts/generate-knowledge-base.prompt.md)
+  or [`.github/prompts/generate-kt-guides.prompt.md`](.github/prompts/generate-kt-guides.prompt.md):
    - Keep the three prompt arguments (`audience`, `focus`, `dry_run`).
    - Keep the pipeline numbered and idempotent.
    - Any new step must specify its idempotency rule and its failure mode.
@@ -60,6 +69,6 @@ See the prompt file for the full step list.
 - [ ] `pip install -r tools/requirements.txt`.
 - [ ] Decide on a domain overlay: keep the Intel one as an example, replace it,
       or delete it.
-- [ ] Run `/generate-kt-guides` with `dry_run=true` first to review the outline.
+- [ ] Run `/generate-knowledge-base` with `dry_run=true` first to review the outline.
 - [ ] Commit `Guides/_inventory.json` alongside `Guides/*.md` so re-runs are
       genuinely idempotent across machines.

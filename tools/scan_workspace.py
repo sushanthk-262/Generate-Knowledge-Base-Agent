@@ -2,7 +2,7 @@
 Scan a workspace and produce an inventory of every relevant file.
 
 Output: JSON list of {path, kind, size, sha256, mtime} entries.
-Used by /generate-kt-guides as the first pipeline step.
+Used by /generate-knowledge-base as the first pipeline step.
 
 Usage:
     python tools/scan_workspace.py --root . --out Guides/_inventory.json
