@@ -28,7 +28,7 @@ You build a newcomer-friendly knowledge base from a repository that may contain 
 ## Pipeline
 
 1. Preflight: ensure dependencies are installed with `pip install -r tools/requirements.txt`.
-2. Inventory: run `python tools/scan_workspace.py --root . --out Guides/_inventory.json`.
+2. Inventory: run `python tools/scan_workspace.py --root . --out Guides/_inventory.json --respect-gitignore`.
 3. Transcribe media: run `python tools/transcribe_videos.py "<folder>" --model base --recursive` where needed.
 4. Extract documents: run `python tools/extract_docs.py --root . --out-suffix .extracted.txt`.
 5. Caption images where missing (`<image>.alt.md`).

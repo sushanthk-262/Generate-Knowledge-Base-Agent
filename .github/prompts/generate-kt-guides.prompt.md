@@ -40,7 +40,7 @@ If dependency installation fails, stop and ask the user to resolve environment i
 ### Step 1 — Inventory pass
 Run:
 ```
-python tools/scan_workspace.py --root . --out Guides/_inventory.json
+python tools/scan_workspace.py --root . --out Guides/_inventory.json --respect-gitignore
 ```
 This produces `Guides/_inventory.json` with one entry per file: `{path, kind, size, sha256, mtime}` where `kind ∈ {text, code, doc, slides, image, video, audio, notebook, other}`.
 
